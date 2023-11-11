@@ -185,4 +185,7 @@ if ! qemu_is_running; then
   exit 3
 fi
 
+echo -e "SSH Command:\n"
+echo -e "\tssh "${ssh_opts[@]}" '/bin/bash -c '"${test_cmd_path_in_qemu}"\n"
+
 ssh "${ssh_opts[@]}" '/bin/bash -c '"${test_cmd_path_in_qemu}"

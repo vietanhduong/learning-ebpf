@@ -31,11 +31,14 @@ fi
 
 # Create a tmp directory that serves as the /test_fs sanbox dir inside qemu.
 tmpdir_for_sandbox=$(mktemp -d)
+tmp_ssh=$REPO_ROOT/ssh.sh
 
 # shellcheck disable=SC2317
 function cleanup {
   retval=$?
   rm -rf "${tmpdir_for_sandbox:?}" || true
+
+  rm -f $tmp_ssh
 
   if [[ -n "${qemu_pid}" ]]; then
     kill "${qemu_pid}" &>/dev/null || true
@@ -117,11 +120,15 @@ test_cmd_path="${tmpdir_for_sandbox}/test_cmd.sh"
 test_cmd_path_in_qemu="/test_fs/test_cmd.sh"
 
 cat <<EOF >"${test_cmd_path}"
-#!/bin/bash -e
-source /test_fs/test_env.sh
+#!/bin/bash
 cd ${test_base}
-echo "---------------"
-${@:1}
+if [[ -n "${@:1}" ]]; then
+  echo "-------------------------------"
+  echo "Command to run test: "
+  echo "  ${@:1}"
+  echo "-------------------------------"
+fi
+/bin/bash -l
 EOF
 chmod +x "${test_cmd_path}"
 
@@ -185,7 +192,11 @@ if ! qemu_is_running; then
   exit 3
 fi
 
-echo -e "SSH Command:\n"
-echo -e "\tssh "${ssh_opts[@]}" '/bin/bash -c '"${test_cmd_path_in_qemu}"\n"
+cat <<EOF >"${tmp_ssh}"
+#!/bin/bash
+ssh ${ssh_opts[@]} '/bin/bash -l'
+EOF
+chmod +x "${tmp_ssh}"
+[[ -f "${tmp_ssh}" ]] && echo -e "Tmp SSH: ${tmp_ssh}"
 
 ssh "${ssh_opts[@]}" '/bin/bash -c '"${test_cmd_path_in_qemu}"

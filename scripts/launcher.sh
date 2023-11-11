@@ -5,6 +5,7 @@ TARGET_KERNEL="5.15.101"
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 BUILDS_DIR="${REPO_ROOT}/.builds"
+SCRIPTS_DIR="${REPO_ROOT}/scripts"
 KERNEL_IMAGE=${BUILDS_DIR}/bzImage
 DISK_IMAGE=${BUILDS_DIR}/qemu-${TARGET_KERNEL}.qcow2
 RUN_SSHD_PATH=$REPO_ROOT/scripts/run_sshd.sh
@@ -37,8 +38,7 @@ tmp_ssh=$REPO_ROOT/ssh.sh
 function cleanup {
   retval=$?
   rm -rf "${tmpdir_for_sandbox:?}" || true
-
-  rm -f $tmp_ssh
+  rm -f $tmp_ssh || true
 
   if [[ -n "${qemu_pid}" ]]; then
     kill "${qemu_pid}" &>/dev/null || true
@@ -109,6 +109,10 @@ done
 runfiles_path="$(path_qemu_sandbox "${RUNFILES_DIR}")"
 mkdir -p "${runfiles_path}"
 cp -afL "${RUNFILES_DIR}"/* "${runfiles_path}"
+# Copy scripts dir
+scripts_path="$(path_qemu_sandbox "${SCRIPTS_DIR}")"
+mkdir -p "${scripts_path}"
+cp -afL "${SCRIPTS_DIR}"/* "${scripts_path}"
 
 # Create test tmp dir.
 if [[ -n "${TEST_TMPDIR}" ]]; then

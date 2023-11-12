@@ -92,7 +92,7 @@ func part2(ctx context.Context) error {
 			return nil
 		default:
 		}
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(time.Second)
 		it := cnttbl.Iter()
 		for it.Next() {
 			d := (*data)(unsafe.Pointer(&it.Key()[0]))

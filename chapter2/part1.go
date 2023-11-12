@@ -86,7 +86,7 @@ func part1(ctx context.Context) error {
 			return nil
 		default:
 		}
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(time.Second)
 		mod.PollPerfBuffer("output", 0)
 	}
 }

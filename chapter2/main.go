@@ -28,6 +28,7 @@ func main() {
 		part1,
 		part2,
 		part3,
+		part4,
 	}
 
 	if fn := parts[part-1]; fn != nil {

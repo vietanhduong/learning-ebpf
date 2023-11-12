@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-TARGET_KERNEL="5.15.101"
+TARGET_KERNEL="5.10.173"
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 BUILDS_DIR="${REPO_ROOT}/.builds"

@@ -11,12 +11,21 @@ import (
 )
 
 /*
-Part 3: The hello-tail.py eBPF program is an example of a program that attaches to the sys_enter
-raw tracepoint that is hit whenever any syscall is called. Change hello-map.py to show the
-total number of syscalls made by each user ID, by attaching it to that same sys_enter raw tracepoint.
+Part 4:
+The RAW_TRACEPOINT_PROBE macro provided by BCC simplifies attaching to raw tracepoints, telling the
+user space BCC code to automatically attach it to a specified tracepoint. Try it in hello-tail.py, like this:
+• Replace the definition of the hello() function with RAW_TRACEPOINT_PROBE(sys_enter).
+• Remove the explicit attachment call b.attach_raw_tracepoint() from the Python code.
+You should see that BCC automatically creates the attachment and the program works exactly the same.
+This is an example of the many convenient macros that BCC provides.
 */
 
-const PART3_BPF_CODE = `
+// FIXME: This might not work probably with
+// the current environent:
+// * kernel 5.10.173
+// * bcc ec49363e2e9daec026ee6cae4c5fc316f8fab0ff
+// But it works fine with part3 (attack raw tracepoint)
+const PART4_BPF_CODE = `
 struct data_t {
 	u64 uid;
 	int syscall;
@@ -24,7 +33,8 @@ struct data_t {
 
 BPF_HASH(output, struct data_t, u64);
 
-int hello(struct bpf_raw_tracepoint_args *ctx) {
+RAW_TRACEPOINT_PROBE(sched_switch) 
+{
 	struct data_t data = {};
 	data.syscall = ctx->args[1];
 	data.uid = bpf_get_current_uid_gid() & 0xFFFFFFFF;
@@ -33,21 +43,12 @@ int hello(struct bpf_raw_tracepoint_args *ctx) {
 }
 `
 
-func part3(ctx context.Context) error {
-	mod, err := bcc.NewModule(PART3_BPF_CODE, nil)
+func part4(ctx context.Context) error {
+	mod, err := bcc.NewModule(PART4_BPF_CODE, nil)
 	if err != nil {
 		return fmt.Errorf("new BCC module: %w", err)
 	}
 	defer mod.Close()
-
-	fd, err := mod.LoadRawTracepoint("hello")
-	if err != nil {
-		return fmt.Errorf("load raw tracepoint: %w", err)
-	}
-
-	if err = mod.AttachRawTracepoint("sys_enter", fd); err != nil {
-		return fmt.Errorf("attack raw tracepoint: %w", err)
-	}
 
 	output := bcc.NewTable(mod.TableId("output"), mod)
 

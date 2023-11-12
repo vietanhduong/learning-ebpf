@@ -1,4 +1,2 @@
-github.com/vietanhduong/go-bpf v0.0.0-20231004045756-8c6aefef2454 h1:GwKPzss0PJdeS7xfnRV86ZkQ40mCqaSH8pxEKBnOEdY=
-github.com/vietanhduong/go-bpf v0.0.0-20231004045756-8c6aefef2454/go.mod h1:oSxDdM1gQC/Vi0x0K2Jg5vasy/xr9JYZ7s45WU8m22g=
 github.com/vietanhduong/go-bpf v0.0.0-20231111161806-968878da290a h1:j8S/sSzTKZUtDqUrdfgJ7PQymOWSenvmdOp6PV0HVSI=
 github.com/vietanhduong/go-bpf v0.0.0-20231111161806-968878da290a/go.mod h1:oSxDdM1gQC/Vi0x0K2Jg5vasy/xr9JYZ7s45WU8m22g=

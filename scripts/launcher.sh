@@ -124,7 +124,7 @@ test_cmd_path="${tmpdir_for_sandbox}/test_cmd.sh"
 test_cmd_path_in_qemu="/test_fs/test_cmd.sh"
 
 cat <<EOF >"${test_cmd_path}"
-#!/bin/bash
+#!/bin/bash -e
 cd ${test_base}
 if [[ -n "${@:1}" ]]; then
   echo "-------------------------------"
@@ -132,7 +132,7 @@ if [[ -n "${@:1}" ]]; then
   echo "  ${@:1}"
   echo "-------------------------------"
 fi
-/bin/bash -l
+${@:1}
 EOF
 chmod +x "${test_cmd_path}"
 

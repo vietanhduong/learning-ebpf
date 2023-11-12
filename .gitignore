@@ -4,3 +4,4 @@
 *.log
 bin/
 ssh.sh
+mon.sock

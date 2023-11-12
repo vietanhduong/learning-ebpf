@@ -26,6 +26,7 @@ func main() {
 
 	parts := [5]func(context.Context) error{
 		part1,
+		part2,
 	}
 
 	if fn := parts[part-1]; fn != nil {

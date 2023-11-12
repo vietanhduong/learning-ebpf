@@ -58,7 +58,7 @@ func part1(ctx context.Context) error {
 	helpers.PrintOut("Loaded Kprobe hello (fd=%d)", fd)
 
 	syscall := bcc.GetSyscallFnName("execve")
-	if err = mod.AttachKprobe(syscall, fd, -1); err != nil {
+	if err = mod.AttachKprobe(syscall, fd, MAX_ACTIVE); err != nil {
 		return fmt.Errorf("attack kprobe: %w", err)
 	}
 	helpers.PrintOut("Attached kprobe to syscall %s", syscall)

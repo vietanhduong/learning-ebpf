@@ -67,7 +67,7 @@ func part2(ctx context.Context) error {
 		return fmt.Errorf("load kprobe %s: %w", openatFn, err)
 	}
 
-	if err = mod.AttachKprobe(openat, fd, -1); err != nil {
+	if err = mod.AttachKprobe(openat, fd, MAX_ACTIVE); err != nil {
 		return fmt.Errorf("attach kprobe %s: %w", openat, err)
 	}
 
@@ -75,7 +75,7 @@ func part2(ctx context.Context) error {
 		return fmt.Errorf("load kprobe %s: %w", writeFn, err)
 	}
 
-	if err = mod.AttachKprobe(write, fd, -1); err != nil {
+	if err = mod.AttachKprobe(write, fd, MAX_ACTIVE); err != nil {
 		return fmt.Errorf("attach kprobe %s: %w", write, err)
 	}
 
@@ -100,5 +100,6 @@ func part2(ctx context.Context) error {
 			cnt := (*uint64)(unsafe.Pointer(&it.Leaf()[0]))
 			helpers.PrintOut("syscall=%s uid=%d cnt=%d", C.GoString(syscall), d.uid, *cnt)
 		}
+		helpers.PrintOut("-------------------")
 	}
 }

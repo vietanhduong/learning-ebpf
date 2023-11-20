@@ -51,12 +51,12 @@ func part2(ctx context.Context) error {
 	openatFn := fmt.Sprintf("hello_%s", openat)
 	write := bcc.GetSyscallFnName("write")
 	writeFn := fmt.Sprintf("hello_%s", write)
-	mod, err := bcc.NewModule(PART2_BPF_CODE, []string{
+	mod, err := bcc.NewModule(PART2_BPF_CODE, bcc.WithCFlags(
 		fmt.Sprintf("-DCFG_OPEN_AT_SYSCALL_FN=%s", openatFn),
 		fmt.Sprintf(`-DCFG_OPEN_AT_SYSCALL="%s"`, openat),
 		fmt.Sprintf("-DCFG_WRITE_SYSCALL_FN=%s", writeFn),
 		fmt.Sprintf(`-DCFG_WRITE_SYSCALL="%s"`, write),
-	})
+	))
 	if err != nil {
 		return fmt.Errorf("new bcc module: %w", err)
 	}

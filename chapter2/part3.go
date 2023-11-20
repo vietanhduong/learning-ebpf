@@ -34,7 +34,7 @@ int hello(struct bpf_raw_tracepoint_args *ctx) {
 `
 
 func part3(ctx context.Context) error {
-	mod, err := bcc.NewModule(PART3_BPF_CODE, nil)
+	mod, err := bcc.NewModule(PART3_BPF_CODE)
 	if err != nil {
 		return fmt.Errorf("new BCC module: %w", err)
 	}

@@ -44,7 +44,7 @@ int hello(void *ctx) {
 `
 
 func part1(ctx context.Context) error {
-	mod, err := bcc.NewModule(PART1_BPF_CODE, nil)
+	mod, err := bcc.NewModule(PART1_BPF_CODE)
 	if err != nil {
 		return fmt.Errorf("new BCC: %w", err)
 	}

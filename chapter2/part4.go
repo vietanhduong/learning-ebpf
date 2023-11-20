@@ -20,11 +20,6 @@ You should see that BCC automatically creates the attachment and the program wor
 This is an example of the many convenient macros that BCC provides.
 */
 
-// FIXME: This might not work probably with
-// the current environent:
-// * kernel 5.10.173
-// * bcc ec49363e2e9daec026ee6cae4c5fc316f8fab0ff
-// But it works fine with part3 (attack raw tracepoint)
 const PART4_BPF_CODE = `
 struct data_t {
 	u64 uid;
@@ -44,7 +39,7 @@ RAW_TRACEPOINT_PROBE(sched_switch)
 `
 
 func part4(ctx context.Context) error {
-	mod, err := bcc.NewModule(PART4_BPF_CODE, nil)
+	mod, err := bcc.NewModule(PART4_BPF_CODE)
 	if err != nil {
 		return fmt.Errorf("new BCC module: %w", err)
 	}
